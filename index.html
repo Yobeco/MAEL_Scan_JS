@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <title>Scanner QR - Test</title>
+  <link rel="stylesheet" href="style.css">
+
+  <!-- Import map : permet d'utiliser "import ... from 'qr-scanner'" -->
+  <script type="importmap">
+  {
+    "imports": {
+      "qr-scanner": "https://cdn.jsdelivr.net/npm/qr-scanner@1.4.2/qr-scanner.min.js"
+    }
+  }
+  </script>
+</head>
+<body>
+
+  <main class="app">
+    <!-- 1. Logo (SVG inline pour l'exemple, remplacez par <img src="logo.png">) -->
+    <div class="logo" aria-label="Logo">
+      <img src="Logo-MAEL.png" alt="Logo" class="logo-img" width="96" height="96">
+    </div>
+
+    <!-- 2. Champ de texte (readonly, affiche MAEL par défaut) -->
+    <input
+      id="result"
+      class="result"
+      type="text"
+      value="MAEL"
+      readonly
+      aria-label="Résultat du scan"
+    >
+
+    <!-- 3. Bouton Scanner -->
+    <button id="scanBtn" class="btn" type="button">Scanner</button>
+  </main>
+
+  <!-- Overlay plein écran avec la vidéo -->
+  <div id="scanner-overlay" class="overlay hidden" aria-hidden="true">
+    <video id="qr-video" class="video" playsinline muted></video>
+    <button id="closeBtn" class="close-btn" type="button" aria-label="Fermer">×</button>
+    <p class="hint">Pointez la caméra vers un code QR</p>
+  </div>
+
+  <script type="module" src="app.js"></script>
+</body>
+</html>
