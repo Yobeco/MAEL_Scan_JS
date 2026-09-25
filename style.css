@@ -30,22 +30,34 @@ html, body {
     justify-content: center;
 }
 
-/* Champ de texte : centré, largeur maîtrisée */
+/* Champ de texte : centré, multi-lignes, largeur maîtrisée */
 .result {
+    /* Dimensionnement */
     width: 100%;
     max-width: 320px;
+    min-height: 3.5em;       /* hauteur minimale ~2 lignes */
+    max-height: 40vh;        /* au-delà, on scrolle au lieu de pousser la page */
+    resize: none;            /* pas de poignée de redimensionnement manuelle */
+
+    /* Mise en forme du texte */
     padding: 14px 18px;
-    font-size: 1.5rem;
+    font-family: inherit;    /* un <textarea> n'hérite pas de la police par défaut */
+    font-size: max(16px, 1.25rem);
     font-weight: 600;
+    line-height: 1.35;       /* interligne lisible sur plusieurs lignes */
     text-align: center;
-    letter-spacing: 0.05em;
+    letter-spacing: 0.03em;
+    overflow-wrap: anywhere; /* casse les très longs tokens (URLs, etc.) */
+    white-space: pre-wrap;   /* respecte les \n et autorise le retour à la ligne */
+
+    /* Apparence */
     color: #111827;
     background: #ffffff;
     border: 2px solid #e5e7eb;
     border-radius: 12px;
     outline: none;
-    /* Empêche le zoom automatique sur iOS lors du focus */
-    font-size: max(16px, 1.5rem);
+    overflow-y: auto;        /* scroll vertical si dépasse max-height */
+    box-sizing: border-box;  /* le padding n'agrandit pas la largeur */
 }
 
 /* Bouton principal */

@@ -24,15 +24,15 @@
       <img src="Logo-MAEL.png" alt="Logo" class="logo-img" width="96" height="96">
     </div>
 
-    <!-- 2. Champ de texte (readonly, affiche MAEL par défaut) -->
-    <input
+    <!-- 2. Champ de texte multi-lignes (readonly, affiche MAEL par défaut) -->
+    <textarea
       id="result"
       class="result"
-      type="text"
-      value="MAEL"
       readonly
+      rows="1"
+      wrap="soft"
       aria-label="Résultat du scan"
-    >
+    >MAEL</textarea>
 
     <!-- 3. Bouton Scanner -->
     <button id="scanBtn" class="btn" type="button">Scanner</button>
