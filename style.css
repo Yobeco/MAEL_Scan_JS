@@ -30,25 +30,25 @@ html, body {
     justify-content: center;
 }
 
-/* Champ de texte : centré, multi-lignes, largeur maîtrisée */
+/* Champ de texte : centré, multi-lignes, s'adapte au contenu */
 .result {
     /* Dimensionnement */
     width: 100%;
     max-width: 320px;
-    min-height: 3.5em;       /* hauteur minimale ~2 lignes */
-    max-height: 40vh;        /* au-delà, on scrolle au lieu de pousser la page */
-    resize: none;            /* pas de poignée de redimensionnement manuelle */
+    min-height: 3.5em;       /* hauteur plancher (1 à 2 lignes) */
+    resize: none;            /* pas de poignée de redimensionnement */
+    overflow: hidden;        /* ⬅️ supprime l'ascenseur */
 
     /* Mise en forme du texte */
     padding: 14px 18px;
-    font-family: inherit;    /* un <textarea> n'hérite pas de la police par défaut */
+    font-family: inherit;
     font-size: max(16px, 1.25rem);
     font-weight: 600;
-    line-height: 1.35;       /* interligne lisible sur plusieurs lignes */
+    line-height: 1.35;
     text-align: center;
     letter-spacing: 0.03em;
-    overflow-wrap: anywhere; /* casse les très longs tokens (URLs, etc.) */
-    white-space: pre-wrap;   /* respecte les \n et autorise le retour à la ligne */
+    overflow-wrap: anywhere;
+    white-space: pre-wrap;
 
     /* Apparence */
     color: #111827;
@@ -56,8 +56,10 @@ html, body {
     border: 2px solid #e5e7eb;
     border-radius: 12px;
     outline: none;
-    overflow-y: auto;        /* scroll vertical si dépasse max-height */
-    box-sizing: border-box;  /* le padding n'agrandit pas la largeur */
+    box-sizing: border-box;
+
+    /* Transition douce quand la hauteur change */
+    transition: height 0.15s ease;
 }
 
 /* Bouton principal */
