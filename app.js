@@ -9,20 +9,69 @@ const video    = document.getElementById('qr-video');
 
 // --- Auto-dimensionnement du textarea ---
 function autoResize(el) {
-    el.style.height = 'auto';       // réinitialise pour pouvoir rétrécir
-    el.style.height = el.scrollHeight + 'px'; // ajuste à la hauteur du contenu
+    el.style.height = 'auto';
+    el.style.height = el.scrollHeight + 'px';
+}
+autoResize(resultEl);
+
+// --- Synthèse vocale via Web Speech API ---
+let speechUnlocked = false;
+
+/**
+ * Déverrouille speechSynthesis sur iOS.
+ * À appeler impérativement pendant un geste utilisateur (clic).
+ * Un utterance muet suffit à autoriser les lectures futures.
+ */
+function unlockSpeech() {
+    if (speechUnlocked || !('speechSynthesis' in window)) return;
+    const silent = new SpeechSynthesisUtterance(' ');
+    silent.volume = 0;
+    silent.rate = 10;
+    window.speechSynthesis.speak(silent);
+    speechUnlocked = true;
 }
 
-// Ajuste dès le chargement (au cas où la valeur initiale serait longue)
-autoResize(resultEl);
+/**
+ * Lit un texte à voix haute.
+ * Sur iOS, ne fonctionne de façon fiable qu'après unlockSpeech().
+ */
+function speakText(text) {
+    if (!('speechSynthesis' in window)) {
+        console.warn("speechSynthesis non supporté.");
+        return;
+    }
+    const clean = text.trim();
+    if (!clean) return;
+
+    // Stoppe toute lecture en cours avant d'en démarrer une nouvelle
+    window.speechSynthesis.cancel();
+
+    const utterance = new SpeechSynthesisUtterance(clean);
+    utterance.lang   = 'fr-FR';
+    utterance.rate   = 1;     // 0.1 – 10
+    utterance.pitch  = 1;     // 0 – 2
+    utterance.volume = 1;     // 0 – 1
+
+    // On diffère très légèrement l'appel : iOS a parfois besoin que la
+    // boucle d'événements se termine après stopScan() pour accepter le speak().
+    setTimeout(() => {
+        window.speechSynthesis.speak(utterance);
+    }, 50);
+}
 
 // --- Instanciation du scanner Nimiq ---
 const qrScanner = new QrScanner(
     video,
     (result) => {
+        // 1. Affiche le contenu dans le textarea
         resultEl.value = result.data;
-        autoResize(resultEl);        // ⬅️ ajuste après la mise à jour
+        autoResize(resultEl);
+
+        // 2. Ferme l'overlay caméra (libère la ressource avant l'audio)
         stopScan();
+
+        // 3. Lecture vocale automatique du contenu scanné
+        speakText(result.data);
     },
     {
         preferredCamera: 'environment',
@@ -34,7 +83,7 @@ const qrScanner = new QrScanner(
     }
 );
 
-// --- Démarrage du scan ---
+// --- Démarrage / arrêt du scan ---
 async function startScan() {
     const hasCamera = await QrScanner.hasCamera();
     if (!hasCamera) {
@@ -58,7 +107,6 @@ async function startScan() {
     }
 }
 
-// --- Arrêt du scan ---
 function stopScan() {
     qrScanner.stop();
     overlay.classList.add('hidden');
@@ -66,13 +114,20 @@ function stopScan() {
 }
 
 // --- Écouteurs d'événements ---
-scanBtn.addEventListener('click', startScan);
+scanBtn.addEventListener('click', () => {
+    // 🔑 Point clé : on déverrouille la synthèse vocale PENDANT
+    // le clic (geste utilisateur requis par iOS).
+    unlockSpeech();
+    startScan();
+});
+
 closeBtn.addEventListener('click', stopScan);
 
-// Recalcule la taille si l'utilisateur fait pivoter son téléphone
 window.addEventListener('orientationchange', () => {
     setTimeout(() => autoResize(resultEl), 100);
 });
 
-// Nettoyage propre lors de la fermeture de la page (iOS apprécie)
-window.addEventListener('pagehide', () => qrScanner.stop());
+window.addEventListener('pagehide', () => {
+    qrScanner.stop();
+    window.speechSynthesis.cancel();
+});
