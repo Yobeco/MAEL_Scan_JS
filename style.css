@@ -63,7 +63,7 @@ html, body {
     transition: height 0.15s ease;
 }
 
-/* ---------- Bouton-image (logo cliquable, aspect plat) ---------- */
+/* ---------- Boutons-images (aspect plat) ---------- */
 .scan-btn {
     /* Apparence totalement plate */
     background: none;
@@ -91,15 +91,20 @@ html, body {
     transition: transform 0.1s ease;
 }
 
-/* Effet tactile léger : le logo s'enfonce légèrement au tap */
+/* Effet tactile léger : l'image s'enfonce légèrement au tap */
 .scan-btn:active {
     transform: scale(0.96);
 }
 
-/* L'image du logo */
+/* Rapproche visuellement le second bouton du premier */
+#scanSlowBtn {
+margin-top: -12px;
+}
+
+/* Les images des boutons */
 .scan-logo {
     display: block;
-    width: 160px;              /* taille du logo cliquable */
+    width: 160px;              /* taille de l'image cliquable */
     height: auto;
     max-width: 60vw;           /* reste raisonnable sur petit écran */
     user-select: none;         /* empêche la sélection au tap long */

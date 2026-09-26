@@ -93,9 +93,10 @@ class ScanApp {
      * @param {HTMLElement}         cfg.overlayEl
      * @param {HTMLVideoElement}    cfg.videoEl
      * @param {HTMLButtonElement}   cfg.closeBtn
-     * @param {Array<{el: HTMLButtonElement, rate: number}>} cfg.scanButtons
+     * @param {HTMLButtonElement}   cfg.scanBtn   // ouvre la caméra
+     * @param {HTMLButtonElement}   cfg.slowBtn   // relit le texte déjà affiché
      */
-    constructor({ resultEl, overlayEl, videoEl, closeBtn, scanButtons }) {
+    constructor({ resultEl, overlayEl, videoEl, closeBtn, scanBtn, slowBtn }) {
         this.resultEl = resultEl;
         this.overlayEl = overlayEl;
 
@@ -106,14 +107,16 @@ class ScanApp {
             onResult: (result) => this.handleResult(result),
         });
 
-        /** Vitesse de lecture à utiliser pour le prochain résultat scanné. */
+        /** Vitesse à appliquer au prochain résultat scanné. */
         this.pendingRate = 1;
 
-        // Câble chaque bouton de scan avec sa vitesse associée
-        for (const { el, rate } of scanButtons) {
-            el.addEventListener('click', () => this.startScan(rate));
-        }
+        // Bouton "Scanner" : ouvre la caméra, lecture à vitesse normale
+        scanBtn.addEventListener('click', () => this.startScan(1));
 
+        // Bouton "Lent" : relit le texte déjà affiché, sans ouvrir la caméra
+        slowBtn.addEventListener('click', () => this.replaySlow());
+
+        // Fermeture de l'overlay caméra
         closeBtn.addEventListener('click', () => this.stopScan());
 
         // Recalcule la hauteur du textarea après rotation d'écran (iOS)
@@ -138,7 +141,7 @@ class ScanApp {
         el.style.height = el.scrollHeight + 'px';
     }
 
-    /* ---------- Scan ---------- */
+    /* ---------- Scan (bouton Scanner) ---------- */
     async startScan(rate) {
         // 🔑 Déverrouille la synthèse vocale PENDANT le geste utilisateur
         this.speech.unlock();
@@ -173,6 +176,20 @@ class ScanApp {
         this.overlayEl.setAttribute('aria-hidden', 'true');
     }
 
+    /* ---------- Relecture lente (bouton Lent) ---------- */
+    replaySlow() {
+        // Le clic utilisateur suffit à autoriser la lecture sur iOS
+        this.speech.unlock();
+
+        const text = this.resultEl.value.trim();
+        if (!text) {
+            alert("Aucun texte à relire.");
+            return;
+        }
+
+        this.speech.speak(text, 0.8);
+    }
+
     /* ---------- Résultat d'un scan ---------- */
     handleResult(result) {
         this.resultEl.value = result.data;
@@ -180,20 +197,18 @@ class ScanApp {
         this.stopScan();
         this.speech.speak(result.data, this.pendingRate);
     }
-     }
+}
 
-     /* ============================================================
-      * Bootstrap
-      * ============================================================ */
-     document.addEventListener('DOMContentLoaded', () => {
-         new ScanApp({
-             resultEl:  document.getElementById('result'),
-                     overlayEl: document.getElementById('scanner-overlay'),
-                     videoEl:   document.getElementById('qr-video'),
-                     closeBtn:  document.getElementById('closeBtn'),
-                     scanButtons: [
-                         { el: document.getElementById('scanBtn'),     rate: 1   },
-                     { el: document.getElementById('scanSlowBtn'), rate: 0.8 },
-                     ],
-         });
-     });
+/* ============================================================
+ * Bootstrap
+ * ============================================================ */
+document.addEventListener('DOMContentLoaded', () => {
+    new ScanApp({
+        resultEl:  document.getElementById('result'),
+                overlayEl: document.getElementById('scanner-overlay'),
+                videoEl:   document.getElementById('qr-video'),
+                closeBtn:  document.getElementById('closeBtn'),
+                scanBtn:   document.getElementById('scanBtn'),
+                slowBtn:   document.getElementById('scanSlowBtn'),
+    });
+});
