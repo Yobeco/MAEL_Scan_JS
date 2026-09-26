@@ -3,8 +3,13 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+
+  <!-- Plein écran sur les navigateurs modernes (Brave, Chrome, etc.) -->
+  <meta name="mobile-web-app-capable" content="yes">
+  <!-- Conservé pour le plein écran sur iOS (Safari) -->
   <meta name="apple-mobile-web-app-capable" content="yes">
-  <title>Scanner QR - Test</title>
+
+  <title>MAEL Scan</title>
   <link rel="stylesheet" href="style.css">
 
   <!-- Import map : permet d'utiliser "import ... from 'qr-scanner'" -->
@@ -19,12 +24,8 @@
 <body>
 
   <main class="app">
-    <!-- 1. Logo (SVG inline pour l'exemple, remplacez par <img src="logo.png">) -->
-    <div class="logo" aria-label="Logo">
-      <img src="Logo-MAEL.png" alt="Logo" class="logo-img" width="96" height="96">
-    </div>
 
-    <!-- 2. Champ de texte multi-lignes (readonly, affiche MAEL par défaut) -->
+    <!-- Champ de texte multi-lignes (readonly, valeur initiale MAEL) -->
     <textarea
       id="result"
       class="result"
@@ -34,11 +35,37 @@
       aria-label="Résultat du scan"
     >MAEL</textarea>
 
-    <!-- 3. Bouton Scanner -->
-    <button id="scanBtn" class="btn" type="button">Scanner</button>
+    <!-- Bouton 1 : scan à vitesse normale (Scanner.png) -->
+    <button
+      id="scanBtn"
+      class="scan-btn"
+      type="button"
+      aria-label="Scanner un code QR (lecture normale)"
+    >
+      <img
+        src="Scanner.png"
+        alt="Logo MAEL — appuyer pour scanner"
+        class="scan-logo"
+      >
+    </button>
+
+    <!-- Bouton 2 : scan à vitesse lente (Lent.png, rate 0.8) -->
+    <button
+      id="scanSlowBtn"
+      class="scan-btn"
+      type="button"
+      aria-label="Scanner un code QR (lecture lente)"
+    >
+      <img
+        src="Lent.png"
+        alt="Mode lent — appuyer pour scanner"
+        class="scan-logo"
+      >
+    </button>
+
   </main>
 
-  <!-- Overlay plein écran avec la vidéo -->
+  <!-- Overlay plein écran avec la vidéo de la caméra -->
   <div id="scanner-overlay" class="overlay hidden" aria-hidden="true">
     <video id="qr-video" class="video" playsinline muted></video>
     <button id="closeBtn" class="close-btn" type="button" aria-label="Fermer">×</button>

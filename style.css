@@ -1,5 +1,11 @@
+/* ============================================================
+ *  MAEL Scan JS — Feuille de style complète
+ *  ============================================================ */
+
 /* ---------- Reset & base ---------- */
-* { box-sizing: border-box; }
+* {
+    box-sizing: border-box;
+}
 
 html, body {
     margin: 0;
@@ -11,7 +17,7 @@ html, body {
     -webkit-text-size-adjust: 100%;
 }
 
-/* ---------- Mise en page ---------- */
+/* ---------- Mise en page générale ---------- */
 .app {
     min-height: 100vh;
     min-height: 100dvh; /* iOS 15.4+ : tient compte de la barre d'URL */
@@ -25,30 +31,25 @@ html, body {
     padding-bottom: max(24px, env(safe-area-inset-bottom));
 }
 
-.logo {
-    display: flex;
-    justify-content: center;
-}
-
-/* Champ de texte : centré, multi-lignes, s'adapte au contenu */
+/* ---------- Champ de texte multi-lignes auto-dimensionné ---------- */
 .result {
     /* Dimensionnement */
     width: 100%;
     max-width: 320px;
-    min-height: 3.5em;       /* hauteur plancher (1 à 2 lignes) */
-    resize: none;            /* pas de poignée de redimensionnement */
-    overflow: hidden;        /* ⬅️ supprime l'ascenseur */
+    min-height: 3.5em;         /* hauteur plancher (1 à 2 lignes) */
+    resize: none;              /* pas de poignée de redimensionnement */
+    overflow: hidden;          /* supprime l'ascenseur */
 
     /* Mise en forme du texte */
     padding: 14px 18px;
-    font-family: inherit;
+    font-family: inherit;      /* un <textarea> n'hérite pas de la police par défaut */
     font-size: max(16px, 1.25rem);
     font-weight: 600;
-    line-height: 1.35;
+    line-height: 1.35;         /* interligne lisible sur plusieurs lignes */
     text-align: center;
     letter-spacing: 0.03em;
-    overflow-wrap: anywhere;
-    white-space: pre-wrap;
+    overflow-wrap: anywhere;   /* casse les très longs tokens (URLs, etc.) */
+    white-space: pre-wrap;     /* respecte les \n et autorise le retour à la ligne */
 
     /* Apparence */
     color: #111827;
@@ -62,25 +63,51 @@ html, body {
     transition: height 0.15s ease;
 }
 
-/* Bouton principal */
-.btn {
-    width: 100%;
-    max-width: 320px;
-    padding: 16px 24px;
-    font-size: 1.125rem;
-    font-weight: 600;
-    color: #ffffff;
-    background: #2563eb;
-    border: none;
-    border-radius: 12px;
-    cursor: pointer;
-    transition: background-color .15s ease, transform .05s ease;
-    -webkit-tap-highlight-color: transparent;
-}
-.btn:hover  { background: #1d4ed8; }
-.btn:active { transform: scale(0.98); }
+/* ---------- Bouton-image (logo cliquable, aspect plat) ---------- */
+.scan-btn {
+    /* Apparence totalement plate */
+    background: none;
+    border: 0;
+    padding: 0;
+    margin: 0;
+    appearance: none;
+    -webkit-appearance: none;
+    box-shadow: none;
+    outline: none;
+    border-radius: 0;
 
-/* ---------- Overlay caméra ---------- */
+    /* Centrage */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    /* Curseur et interaction */
+    cursor: pointer;
+    -webkit-tap-highlight-color: transparent;
+    user-select: none;
+    -webkit-user-select: none;
+
+    /* Animation douce au tap */
+    transition: transform 0.1s ease;
+}
+
+/* Effet tactile léger : le logo s'enfonce légèrement au tap */
+.scan-btn:active {
+    transform: scale(0.96);
+}
+
+/* L'image du logo */
+.scan-logo {
+    display: block;
+    width: 160px;              /* taille du logo cliquable */
+    height: auto;
+    max-width: 60vw;           /* reste raisonnable sur petit écran */
+    user-select: none;         /* empêche la sélection au tap long */
+    -webkit-user-drag: none;   /* empêche le drag de l'image */
+    pointer-events: none;      /* le clic passe au <button> parent */
+}
+
+/* ---------- Overlay caméra plein écran ---------- */
 .overlay {
     position: fixed;
     inset: 0;
@@ -91,7 +118,9 @@ html, body {
     z-index: 100;
 }
 
-.overlay.hidden { display: none; }
+.overlay.hidden {
+    display: none;
+}
 
 .video {
     width: 100%;
@@ -126,6 +155,6 @@ html, body {
     text-align: center;
     color: #fff;
     font-size: 0.95rem;
-    text-shadow: 0 1px 3px rgba(0,0,0,.7);
+    text-shadow: 0 1px 3px rgba(0, 0, 0, 0.7);
     pointer-events: none;
 }
