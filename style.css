@@ -96,8 +96,9 @@ html, body {
     transform: scale(0.96);
 }
 
-/* Rapproche visuellement le second bouton du premier */
-#scanSlowBtn {
+/* Rapproche visuellement les boutons Réécouter et Lent du premier */
+#RepetBtn,
+#SlowBtn {
 margin-top: -12px;
 }
 

@@ -34,7 +34,7 @@ class SpeechController {
     /**
      * Lit un texte à voix haute.
      * @param {string} text  Texte à prononcer
-     * @param {number} rate  Vitesse (1 = normal, 0.8 = 80 %)
+     * @param {number} rate  Vitesse (1 = normal, 0.7 = 70 %)
      */
     speak(text, rate = 1) {
         if (!this.isSupported) return;
@@ -93,10 +93,11 @@ class ScanApp {
      * @param {HTMLElement}         cfg.overlayEl
      * @param {HTMLVideoElement}    cfg.videoEl
      * @param {HTMLButtonElement}   cfg.closeBtn
-     * @param {HTMLButtonElement}   cfg.scanBtn   // ouvre la caméra
-     * @param {HTMLButtonElement}   cfg.slowBtn   // relit le texte déjà affiché
+     * @param {HTMLButtonElement}   cfg.scanBtn    // ouvre la caméra (lecture normale)
+     * @param {HTMLButtonElement}   cfg.repetBtn   // relit le texte à vitesse normale
+     * @param {HTMLButtonElement}   cfg.slowBtn    // relit le texte à vitesse lente (0.7)
      */
-    constructor({ resultEl, overlayEl, videoEl, closeBtn, scanBtn, slowBtn }) {
+    constructor({ resultEl, overlayEl, videoEl, closeBtn, scanBtn, repetBtn, slowBtn }) {
         this.resultEl = resultEl;
         this.overlayEl = overlayEl;
 
@@ -113,8 +114,11 @@ class ScanApp {
         // Bouton "Scanner" : ouvre la caméra, lecture à vitesse normale
         scanBtn.addEventListener('click', () => this.startScan(1));
 
-        // Bouton "Lent" : relit le texte déjà affiché, sans ouvrir la caméra
-        slowBtn.addEventListener('click', () => this.replaySlow());
+        // Bouton "Réécouter" : relit le texte affiché à vitesse normale
+        repetBtn.addEventListener('click', () => this.replay(1));
+
+        // Bouton "Lent" : relit le texte affiché à vitesse lente (0.7)
+        slowBtn.addEventListener('click', () => this.replay(0.7));
 
         // Fermeture de l'overlay caméra
         closeBtn.addEventListener('click', () => this.stopScan());
@@ -176,8 +180,12 @@ class ScanApp {
         this.overlayEl.setAttribute('aria-hidden', 'true');
     }
 
-    /* ---------- Relecture lente (bouton Lent) ---------- */
-    replaySlow() {
+    /* ---------- Relecture (boutons Réécouter / Lent) ---------- */
+    /**
+     * Relit le texte déjà présent dans le textarea, sans ouvrir la caméra.
+     * @param {number} rate  Vitesse de lecture (1 = normal, 0.7 = lent)
+     */
+    replay(rate) {
         // Le clic utilisateur suffit à autoriser la lecture sur iOS
         this.speech.unlock();
 
@@ -187,7 +195,7 @@ class ScanApp {
             return;
         }
 
-        this.speech.speak(text, 0.8);
+        this.speech.speak(text, rate);
     }
 
     /* ---------- Résultat d'un scan ---------- */
@@ -209,6 +217,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 videoEl:   document.getElementById('qr-video'),
                 closeBtn:  document.getElementById('closeBtn'),
                 scanBtn:   document.getElementById('scanBtn'),
-                slowBtn:   document.getElementById('scanSlowBtn'),
+                repetBtn:  document.getElementById('RepetBtn'),
+                slowBtn:   document.getElementById('SlowBtn'),
     });
 });
