@@ -23,6 +23,22 @@
 </head>
 <body>
 
+  <!-- Barre d'en-tête -->
+  <header class="app-header">
+    <!-- Drapeaux à gauche -->
+    <img src="langues_64px.png" alt="Drapeaux" class="header-icon">
+
+    <!-- Titre au centre -->
+    <h1 class="header-title">MAEL Scan</h1>
+
+    <!-- Version et QR code à droite -->
+    <div class="header-right">
+      <span class="header-version">V6.0</span>
+      <img src="qr-scan-svgrepo-com.svg" alt="QR Code" class="header-icon">
+    </div>
+  </header>
+
+
   <main class="app">
 
     <!-- Champ de texte multi-lignes (readonly, valeur initiale MAEL) -->
@@ -78,6 +94,12 @@
     </button>
 
   </main>
+
+  <!-- Pied de page -->
+  <footer class="app-footer">
+    <img src="logo_lvh_150px.png" alt="Logo LVH" class="footer-logo">
+    <span class="footer-text">Auteur : Yonnel Bécognée - Licence GNU GPL V3</span>
+  </footer>
 
   <!-- Overlay plein écran avec la vidéo de la caméra -->
   <div id="scanner-overlay" class="overlay hidden" aria-hidden="true">
