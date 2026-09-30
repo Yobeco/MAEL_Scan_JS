@@ -25,7 +25,7 @@ body {
     display: flex;
     flex-direction: column;
     min-height: 100vh;
-    min-height: 100dvh;         /* iOS 15.4+ : tient compte de la barre d'URL */
+    min-height: 100svh;         /* iOS 15.4+ : tient compte de la barre d'URL */
 }
 
 /* ============================================================
