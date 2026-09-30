@@ -1,5 +1,5 @@
 /* ============================================================
- *  MAEL Scan JS — Feuille de style complète
+ *  MAEL Scan JS — Feuille de style complète (corrigée)
  *  ============================================================ */
 
 /* ---------- Reset & base ---------- */
@@ -7,17 +7,25 @@
     box-sizing: border-box;
 }
 
+html {
+    height: 100%;               /* permet à min-height:100% du body de se référer à la fenêtre */
+}
+
 html, body {
     margin: 0;
     padding: 0;
-    min-height: 100%;
     font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
     background: #f5f7fb;
     color: #1f2937;
     -webkit-text-size-adjust: 100%;
-    /* NOUVEAU : Pour pousser le footer en bas de page */
+}
+
+body {
+    /* Colonne flex : header / main / footer se partagent la hauteur */
     display: flex;
     flex-direction: column;
+    min-height: 100vh;
+    min-height: 100dvh;         /* iOS 15.4+ : tient compte de la barre d'URL */
 }
 
 /* ============================================================
@@ -29,7 +37,7 @@ html, body {
     justify-content: space-between;
     width: 100%;
     padding: 12px 16px;
-    background-color: #238ffe; /* Couleur demandée */
+    background-color: #238ffe;
     color: #ffffff;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     /* Gestion de l'encoche sur iOS */
@@ -39,6 +47,7 @@ html, body {
     position: sticky;
     top: 0;
     z-index: 50;
+    flex-shrink: 0;             /* le header ne doit pas se compresser */
 }
 
 /* Titre au centre */
@@ -48,7 +57,7 @@ html, body {
     font-weight: bold;
     margin: 0;
     text-align: center;
-    flex-grow: 1; /* Prend tout l'espace disponible */
+    flex-grow: 1;
     white-space: nowrap;
 }
 
@@ -77,9 +86,9 @@ html, body {
 
 /* ---------- Mise en page générale ---------- */
 .app {
-    flex: 1; /* NOUVEAU : Prend tout l'espace disponible entre le header et le footer */
-    min-height: 100vh;
-    min-height: 100dvh; /* iOS 15.4+ : tient compte de la barre d'URL */
+    /* NOUVEAU : prend tout l'espace restant entre le header et le footer.
+     *      Plus de min-height: 100vh ici → le footer reste visible. */
+    flex: 1;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -95,20 +104,20 @@ html, body {
     /* Dimensionnement */
     width: 100%;
     max-width: 320px;
-    min-height: 3.5em;         /* hauteur plancher (1 à 2 lignes) */
-    resize: none;              /* pas de poignée de redimensionnement */
-    overflow: hidden;          /* supprime l'ascenseur */
+    min-height: 3.5em;
+    resize: none;
+    overflow: hidden;
 
     /* Mise en forme du texte */
     padding: 14px 18px;
-    font-family: inherit;      /* un <textarea> n'hérite pas de la police par défaut */
+    font-family: inherit;
     font-size: max(16px, 1.25rem);
     font-weight: 600;
-    line-height: 1.35;         /* interligne lisible sur plusieurs lignes */
+    line-height: 1.35;
     text-align: center;
     letter-spacing: 0.03em;
-    overflow-wrap: anywhere;   /* casse les très longs tokens (URLs, etc.) */
-    white-space: pre-wrap;     /* respecte les \n et autorise le retour à la ligne */
+    overflow-wrap: anywhere;
+    white-space: pre-wrap;
 
     /* Apparence */
     color: #111827;
@@ -118,13 +127,11 @@ html, body {
     outline: none;
     box-sizing: border-box;
 
-    /* Transition douce quand la hauteur change */
     transition: height 0.15s ease;
 }
 
 /* ---------- Boutons-images (aspect plat) ---------- */
 .scan-btn {
-    /* Apparence totalement plate */
     background: none;
     border: 0;
     padding: 0;
@@ -135,22 +142,18 @@ html, body {
     outline: none;
     border-radius: 0;
 
-    /* Centrage */
     display: flex;
     align-items: center;
     justify-content: center;
 
-    /* Curseur et interaction */
     cursor: pointer;
     -webkit-tap-highlight-color: transparent;
     user-select: none;
     -webkit-user-select: none;
 
-    /* Animation douce au tap */
     transition: transform 0.1s ease;
 }
 
-/* Effet tactile léger : l'image s'enfonce légèrement au tap */
 .scan-btn:active {
     transform: scale(0.96);
 }
@@ -164,12 +167,12 @@ margin-top: -12px;
 /* Les images des boutons */
 .scan-logo {
     display: block;
-    width: 160px;              /* taille de l'image cliquable */
+    width: 160px;
     height: auto;
-    max-width: 60vw;           /* reste raisonnable sur petit écran */
-    user-select: none;         /* empêche la sélection au tap long */
-    -webkit-user-drag: none;   /* empêche le drag de l'image */
-    pointer-events: none;      /* le clic passe au <button> parent */
+    max-width: 60vw;
+    user-select: none;
+    -webkit-user-drag: none;
+    pointer-events: none;
 }
 
 /* ---------- Overlay caméra plein écran ---------- */
@@ -237,10 +240,10 @@ margin-top: -12px;
     background-color: #ffffff;
     color: #1f2937;
     border-top: 1px solid #e5e7eb;
-    /* Gestion de l'encoche sur iOS */
     padding-bottom: max(16px, env(safe-area-inset-bottom));
     padding-left: max(16px, env(safe-area-inset-left));
     padding-right: max(16px, env(safe-area-inset-right));
+    flex-shrink: 0;             /* le footer ne doit pas se compresser */
 }
 
 /* Logo du footer */
@@ -249,7 +252,7 @@ margin-top: -12px;
     height: 32px;
     object-fit: contain;
     display: block;
-    flex-shrink: 0; /* Empêche le logo de rétrécir sur petit écran */
+    flex-shrink: 0;
 }
 
 /* Texte du footer */
