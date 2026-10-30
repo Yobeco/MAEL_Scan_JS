@@ -265,17 +265,3 @@ margin-top: -12px;
 }
 
 
-/* Bouton d’arrêt audio, cohérent avec les boutons plats de lecture */
-.stop-audio-btn {
-    margin-top: -12px;
-    padding: 10px 18px;
-    border: 1px solid #d1d5db;
-    border-radius: 10px;
-    background: #ffffff;
-    color: #374151;
-    font: inherit;
-    font-weight: 600;
-    cursor: pointer;
-    -webkit-tap-highlight-color: transparent;
-}
-.stop-audio-btn:active { transform: scale(0.97); }

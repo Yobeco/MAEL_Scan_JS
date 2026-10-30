@@ -36,7 +36,6 @@
             };
 
             document.getElementById('scanBtn').addEventListener('click', () => this._start_scan());
-            document.getElementById('stopAudioBtn').addEventListener('click', () => this.stopAudio());
             document.getElementById('RepetBtn').addEventListener('click', () => this._start_repeat(false));
             document.getElementById('SlowBtn').addEventListener('click', () => this._start_repeat(true));
             document.getElementById('closeBtn').addEventListener('click', () => this.stopScan());
@@ -79,12 +78,6 @@
                 );
                 this.stopScan();
             }
-        }
-
-        stopAudio() {
-            this.scan_service.reader.stop();
-            this.scan_service.speech.cancel();
-            if (g.speechSynthesis) g.speechSynthesis.cancel();
         }
 
         stopScan() {
