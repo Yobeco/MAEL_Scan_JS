@@ -1,7 +1,7 @@
 /* qr_parse.py — parsing métier et classement des QR */
 (function(g){
 const MODE_LIRE='lire',MODE_DICTER='dicter',MODE_EPELER='epeler',MODE_CACHER='cacher',MODE_GD='gd',MODE_NC='nc',MODE_LS='ls',MODE_WIFI='wifi',LANG_DEFAULT='fr',GD_PREFIX='/gd/',ROW_TOLERANCE_RATIO=.5;
-const CLOUD_PREFIXES={gd:[MODE_GD,'♫ Google Drive'],nc:[MODE_NC,'♫ NextCloud'],ls:[MODE_LS,'♫ La Suite']};
+const CLOUD_PREFIXES={gd:[MODE_GD,"♫ Écoute l'audio"],nc:[MODE_NC,"♫ Écoute l'audio"],ls:[MODE_LS,"♫ Écoute l'audio"]};
 function _extract_lang(t){if(!t.startsWith('<'))return[null,t];let e=t.indexOf('>');return e<0?[null,t]:[t.slice(1,e),t.slice(e+1)]}
 function _strip_suffix(t){for(const [s,m] of [['#d',MODE_DICTER],['#e',MODE_EPELER],['#c',MODE_CACHER]])if(t.endsWith(s))return[m,t.slice(0,-s.length)];return[null,t]}
 function _split_wifi_fields(body){let fields=[],cur='',esc=false;for(const ch of body){if(esc){cur+='\\'+ch;esc=false}else if(ch==='\\')esc=true;else if(ch===';'){fields.push(cur);cur=''}else cur+=ch}if(esc)cur+='\\';if(cur)fields.push(cur);return fields}
