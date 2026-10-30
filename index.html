@@ -79,6 +79,9 @@
       >
     </button>
 
+    <!-- Arrêt de la lecture audio et de la synthèse vocale -->
+    <button id="stopAudioBtn" class="stop-audio-btn" type="button" aria-label="Arrêter la lecture">■ Arrêter</button>
+
     <!-- Bouton 3 : relit lentement le texte déjà présent (sans scanner) -->
     <button
       id="SlowBtn"
@@ -108,6 +111,36 @@
     <p class="hint">Pointez la caméra vers un code QR</p>
   </div>
 
-  <script type="module" src="app.js"></script>
+  <!-- Modules MAEL : scripts classiques sur serveur statique, mêmes données/règles. -->
+  <script src="lang_tts.js"></script>
+  <script src="mode_msg_data.js"></script>
+  <script src="mode_msg.js"></script>
+  <script src="epel_tts.js"></script>
+  <script src="qr_dto.js"></script>
+  <script src="MAEL_obfus.js"></script>
+  <script src="mael_modes.js"></script>
+  <script src="dicter_tts.js"></script>
+  <script src="qr_parse.js"></script>
+  <script src="tts_setup.js"></script>
+  <script src="tts_player.js"></script>
+  <script src="tts_player_gtts.js"></script>
+  <script src="mp3_read.js"></script>
+  <script src="dico_url.js"></script>
+  <script src="qr_scan.js"></script>
+  <script src="scanner_factory.js"></script>
+  <script src="wifi_setup.js"></script>
+  <script src="mael_scan.js"></script>
+  <script src="mael_Scan_gui.js"></script>
+  <script type="module">
+    import QrScanner from 'qr-scanner';
+    globalThis.QrScanner = QrScanner;
+    try {
+      await import('./app.js');
+    } catch (error) {
+      console.error('Impossible de charger MAEL Scan ou qr-scanner.', error);
+    }
+  
+  </script>
+<script type="module" src="https://static.cloudflareinsights.com/beacon.min.js/vce701823e78c4301a35b7e07294d87301792088814092" integrity="sha512-UKNk8GbxkABxKcXYuLkO16EleLGUkcvJWtpSNmExE0Too3ZaFAxTscNWEc1OdAv5/BikHawapSCaiD2XCmp+Bw==" data-cf-beacon='{"version":"2024.11.0","token":"8607d2a720d14b038279025b2b5a82e5","spa":2}' crossorigin="anonymous"></script>
 </body>
 </html>

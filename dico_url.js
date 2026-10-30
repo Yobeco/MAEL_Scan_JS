@@ -1,0 +1,2 @@
+/* dico_url.py — Google Drive uniquement */
+(function(g){function build_url(item){if(!item||typeof item.mode!=='string'||typeof item.id!=='string'||!item.id)throw Error('CloudItem invalide');if(item.mode==='nc'||item.mode==='ls')throw Error(`Le fournisseur ${item.mode} est réservé mais non configuré`);if(item.mode!=='gd')throw Error(`Fournisseur cloud inconnu: ${item.mode}`);return 'https://drive.google.com/uc?export=download&id='+encodeURIComponent(item.id)};g.build_url=build_url;g.construire_url=build_url})(globalThis);
